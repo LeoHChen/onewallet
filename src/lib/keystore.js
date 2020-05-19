@@ -1,5 +1,6 @@
 import pbkdf2 from "pbkdf2";
 import aesjs from "aes-js";
+import { getValue, saveValue } from '../storage';
 import store from "../popup/store";
 import { encryptPhrase, getAddress, decryptPhrase } from "@harmony-js/crypto";
 const {
@@ -228,21 +229,24 @@ export function decryptKeyStore(password, keystore) {
   return false;
 }
 
-export function createAccount(name, password) {
+export async function createAccount(name, password) {
   let seed = getHarmony().wallet.newMnemonic();
   const keyStore = encryptPhrase(seed, password);
-  const account = getHarmony().wallet.addByMnemonic(seed);
+  const newAccount = getHarmony().wallet.addByMnemonic(seed);
 
+  const existedAccounts = await getAccounts();
+  await saveValue({ accounts: [...existedAccounts, newAccount] });
+
+  /*
   const newAccount = {
     name,
     recoverByCode: true,
     keyStore,
     address: getAddress(account.address).bech32,
   };
+  */
 
-  // const existedAccounts = await getAccounts()
-  // await saveValue({ accounts: [...existedAccounts, newAccount] })
-  //return newAccount
+  /*
 
   let address = getAddress(account.address).bech32;
   let privateKey = account.privateKey;
@@ -253,6 +257,9 @@ export function createAccount(name, password) {
     address,
     passwd,
   };
+  */
+
+  return newAccount
 }
 
 export function importPriveKey(privateKey) {
@@ -424,4 +431,10 @@ export function getNetworkLink(path) {
   }
 
   return basic + path;
+}
+
+export async function getAccounts() {
+  const { accounts = [] } = await getValue('accounts');
+  console.log('Accounts from store - ', accounts);
+  return accounts;
 }

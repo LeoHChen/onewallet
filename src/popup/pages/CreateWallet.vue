@@ -132,8 +132,12 @@ export default {
       }
 
       // this.wallet = generateAccount();
-      this.wallet = createAccount("test account", this.password);
-      console.log(this.wallet);
+      // this.wallet = createAccount("test account", this.password);
+      // console.log(this.wallet);
+
+      const account = createAccount("test account", this.password);
+      this.$store.dispatch('addAccount', account);
+
     },
 
     savePrivateKey(e) {

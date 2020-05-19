@@ -52,6 +52,10 @@ export default {
   }),
 
   mounted() {
+    this.$store.dispatch('fetchAccounts');
+
+    console.log("accounts = ", this.store.accounts)
+
     if (
       typeof this.account.shard !== "undefined" ||
       this.account.shard !== null
