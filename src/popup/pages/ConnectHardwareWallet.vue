@@ -27,6 +27,9 @@
 <script>
 import { mapState } from "vuex";
 import AppHeader from "../components/AppHeader.vue";
+import {
+  connectLedgerApp
+} from "../../lib/ledger";
 
 export default {
   data: () => ({
@@ -43,10 +46,25 @@ export default {
   },
   methods: {
     connect() {
-      //Todo to connect to a ledger wallet
+      console.log("start connecting ledger")
+      connectLedgerApp().then((address) => {
+
+        const wallet = {
+          name: "Ledger",
+          address: address,
+          keystore: "",
+          };
+
+          console.log("connected to ledger", wallet);
+          this.$store.commit("wallets/addAccount", wallet);
+          this.$router.push("/");
+          }
+        );
     }
   }
 };
+
+
 </script>
 <style scoped>
 .connect-wallet {
