@@ -47,17 +47,23 @@ export default {
   methods: {
     connect() {
       console.log("start connecting ledger")
+
       connectLedgerApp().then((address) => {
 
         const wallet = {
+          isLedger: true,
           name: "Ledger",
           address: address,
           keystore: "",
           };
 
-          console.log("connected to ledger", wallet);
           this.$store.commit("wallets/addAccount", wallet);
-          this.$router.push("/");
+
+          // this.$router.push("/");
+          alert("Your ledger account is loaded. To continue, close this tab and use the extension");
+          chrome.tabs.getCurrent(function(tab) {
+            chrome.tabs.remove(tab.id, function() { });
+          });
           }
         );
     }

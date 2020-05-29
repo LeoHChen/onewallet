@@ -15,6 +15,8 @@ async function getHarmonyApp() {
     return harmonyApp
   }
 
+  //console.log('harmonyapp=',harmonyApp)
+
   // check if browser is supported
   getBrowser(navigator.userAgent)
 
