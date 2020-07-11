@@ -148,9 +148,7 @@
           </div>
           <div class="dropdown-menu-item">
             <i class="material-icons">settings_input_component</i>
-            <router-link to="/connect-hardware-wallet"
-              >Connect Hardware Wallet</router-link
-            >
+            <a @click.prevent="() => { connectHardware();}">Connect Hardware Wallet</a>
           </div>
           <div class="dropdown-menu-item" v-show="wallets.accounts.length > 0">
             <i class="material-icons">save</i>
@@ -255,6 +253,11 @@ export default {
       this.hideDropdownMenu();
       this.refreshData();
       if (this.$route.name !== "account") this.$router.push("/");
+    },
+    connectHardware() {
+      chrome.tabs.create({
+        url: "popup.html#/connect-hardware-wallet"
+      });
     },
     refreshData() {
       this.$emit("refresh");
